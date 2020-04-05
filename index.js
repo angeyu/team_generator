@@ -1,63 +1,69 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql');
 const table = require('console.table');
+const mysql = require('mysql');
+
 
 const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3000,
-    user: "root",
-    password: "789456123",
-    database: "team_db"
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '789456123',
+    database: 'team_db'
   });
 
+connection.connect(function(err) {
+    if (err) {
+        console.error('Unable to connect rip');
+        return;
+    }
+    console.log('connected to database');
 
-  start();
-  viewEmployees();
+});
 
-  function start() {
-      return inquirer.prompt({
+start();
+
+//INQUIRER
+function start() {
+     inquirer.prompt({
         type: 'list',
         name: 'choice',
         message: 'What do you want to do?',
         choices: [
-                'View all employees',
-                'View all departments',
-                'Add employee',
-                'Exit']
+                {name: 'View all employees',
+                value: 'view_emp'},
+                {name: 'Add employee',
+                value: 'add_emp'},
+                {name: 'Exit',
+                value: 'exit'}]
             })
-    .then (function(resp) {
-        switch (resp.action) {
-            case 'View all employees':
-            viewEmployees();
-            break;
-
-            case 'View all departments':
-            viewDept();
-            break;
-
-            case 'Add employee':
-            addEmployee();
-            break;
-
-            case 'Exit':
-            leave();
-            break;
+    .then (function(answers) {
+        switch (answers.choice) {
+            case 'view_emp':
+            return viewEmployees()
+     
+            case 'add_emp':
+            return addEmployee()
+            
+            default:
+            return leave();
         }
     })
   };
 
  function viewEmployees() {
-     console.log('VIEW EMPL')
+    connection.query("SELECT * FROM employee", function (err, data) {
+        console.table(data);
+        start();
+    })
  };
  
- function viewDept() {
-
-};
 
 function addEmployee() {
-
+    console.log('ADD EMPL')
+    start();
 };
 
 function leave() {
-
-};
+    console.log('Time for you to go.');
+    process.exit();
+}
