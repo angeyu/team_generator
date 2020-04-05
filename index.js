@@ -59,8 +59,30 @@ function start() {
  
 
 function addEmployee() {
-    console.log('ADD EMPL')
-    start();
+    inquirer.prompt([
+        {type: 'input',
+        name: 'first_name',
+        message: 'Enter first name'
+        },
+        {type: 'input',
+        name: 'last_name',
+        message: 'Enter last name'
+        },
+        {type: 'input',
+        name: 'role_id',
+        message: 'Enter role ID'
+        },
+        {type: 'input',
+        name: 'manager_id',
+        message: 'Enter manager ID, or press ENTER if none'
+        }
+]).then(function(answer) {
+    connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [answer.first_name, answer.last_name, answer.role_id, answer.manager_id], function(err, data) {
+        if (err) throw err;
+        console.table('empoyee added');
+        start();
+    })
+})
 };
 
 function leave() {
