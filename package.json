@@ -1,0 +1,16 @@
+{
+  "name": "employeeee",
+  "version": "1.0.0",
+  "description": "big brother is tracking you",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "author": "Ange Yu",
+  "license": "MIT",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.0.3",
+    "mysql": "^2.17.1"
+  }
+}
